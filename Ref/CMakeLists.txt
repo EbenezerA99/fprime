@@ -55,6 +55,7 @@ add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/PingReceiver/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/RecvBuffApp/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/SendBuffApp/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/SignalGen/")
+add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/P31u_EPS/")
 
 # Add Topology subdirectory
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Top/")

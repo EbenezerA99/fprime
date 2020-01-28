@@ -1,0 +1,1088 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="../../Autocoders/schema/default/component_schema.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+
+<component name="P31u" kind="active" namespace="Ref" modeler="true">
+
+    <import_port_type>Fw/Cmd/CmdRegPortAi.xml</import_port_type>
+    <import_port_type>Fw/Log/LogPortAi.xml</import_port_type>
+    <import_port_type>Fw/Cmd/CmdPortAi.xml</import_port_type>
+    <import_port_type>Svc/Sched/SchedPortAi.xml</import_port_type>
+    <import_port_type>Fw/Tlm/TlmPortAi.xml</import_port_type>
+    <import_port_type>Fw/Cmd/CmdResponsePortAi.xml</import_port_type>
+    <import_port_type>Drv/I2cDriverPorts/I2cWriteReadPortAi.xml</import_port_type>
+    <ports>
+
+
+        <port name="cmdRegOut" data_type="Fw::CmdReg"  kind="output" role="CmdRegistration"    max_number="1">
+        </port>
+
+        <port name="eventOut" data_type="Fw::Log"  kind="output" role="LogEvent"    max_number="1">
+        </port>
+
+        <port name="cmdIn" data_type="Fw::Cmd"  kind="input" role="Cmd"    max_number="1">
+        </port>
+
+        <port name="schedIn" data_type="Svc::Sched"  kind="async_input"    max_number="1">
+        </port>
+
+        <port name="tlmOut" data_type="Fw::Tlm"  kind="output" role="Telemetry"    max_number="1">
+        </port>
+
+        <port name="cmdResponseOut" data_type="Fw::CmdResponse"  kind="output" role="CmdResponse"  max_number="1">
+        </port>
+
+        <port name="I2cWriteRead" data_type="Drv::I2cWriteRead" kind="output" max_number="1">
+        </port>
+
+    </ports>
+
+    <commands>
+        <command kind="async" opcode="0" mnemonic="Get_HK_1">
+            <comment>
+            Housekeeping Base Parameters
+            </comment>
+        </command>
+        <command kind="async" opcode="1" mnemonic="Get_HK_2">
+            <comment>
+            ALL Housekeeping Base Parameters
+            </comment>
+            <args>
+                <arg name="type" type="U8">
+                    <comment>type=0 to request all housekeeping data</comment>
+                </arg>
+             </args>
+        </command>
+
+        <command kind="async" opcode="2" mnemonic="Get_HK_2_VI">
+            <comment>
+            Housekeeping Base Parameters
+            </comment>
+            <args>
+                <arg name="type" type="U8">
+                    <comment>type=1 to request voltage and current subset of HK_2</comment>
+                </arg>
+             </args>
+        </command>
+
+        <command kind="async" opcode="3" mnemonic="Get_HK_2_OUT">
+            <comment>
+            Housekeeping Base Parameters
+            </comment>
+            <args>
+                <arg name="type" type="U8">
+                    <comment>type= 2 to request output switch subset of HK_2</comment>
+                </arg>
+             </args>
+        </command>
+
+        <command kind="async" opcode="4" mnemonic="Get_HK_2_WDT">
+            <comment>
+            Housekeeping Base Parameters
+            </comment>
+            <args>
+                <arg name="type" type="U8">
+                    <comment>type= 3 to request wdt data subset of HK_2</comment>
+                </arg>
+             </args>
+        </command>
+
+        <command kind="async" opcode="5" mnemonic="Get_HK_2_BASIC">
+            <comment>
+            Housekeeping Base Parameters
+            </comment>
+            <args>
+                <arg name="type" type="U8">
+                    <comment>type= 4 to request basic data subset of HK_2</comment>
+                </arg>
+             </args>
+        </command>
+
+        <command kind="async" opcode="6" mnemonic="SET_OUTPUT">
+            <comment>
+            Set output switch states by a bitmask where "1" means the channel is switched on and "0" means it is switched off. LSB is channel 1, next bit is channel 2 etc.
+            </comment>
+            <args>
+                <arg name="output_byte" type="U8">
+                    <comment>[NC NC 3.3V3 3.3V2 3.3V1 5V3 5V2 5V1]</comment>
+                </arg>
+             </args>
+        </command>
+
+        <command kind="async" opcode="7" mnemonic="SET_SINGLE_OUTPUT">
+            <comment>
+            Set output channel to value with delay
+            </comment>
+            <args>
+                <arg name="channel" type="U8">
+                    <comment>Channel(0-5), BP4 heater(6), BP4 switch (7)</comment>
+                </arg>
+                <arg name="value" type="U8">
+                    <comment>0=off, 1=on</comment>
+                </arg>
+                <arg name="Delay" type="I16">
+                    <comment>Delay in seconds </comment>
+                </arg>
+             </args>
+        </command>
+
+        <command kind="async" opcode="8" mnemonic="SET_PV_VOLT">
+            <comment>
+            Set the voltage on the photovoltaic inputs V1, V2, V3 in mV. Takes effect when MODE = 2, See SET_PV_AUTO. Transmit voltage1 first and voltage3 last.
+            </comment>
+            <args>
+                <arg name="voltage1" type="U16">
+                </arg>
+                <arg name="voltage2" type="U16">
+                </arg>
+                <arg name="voltage3" type="U16">
+                </arg>
+             </args>
+        </command>
+
+        <command kind="async" opcode="9" mnemonic="SET_PV_AUTO">
+            <comment>
+            Sets the solar cell power tracking mode
+            </comment>
+            <args>
+                <arg name="mode" type="U8">
+                    <comment>MODE = 0: Hardware default power point MODE = 1: Maximum powerpoint tracking MODE = 2: Fixed software powerpoint, value set with SET_PV_VOLT, default 4V</comment>
+                </arg>
+             </args>
+        </command>
+
+        <command kind="async" opcode="10" mnemonic="SET_HEATER">
+            <comment>
+            Cmd = 0: Set heater on/off. Heater: 0 = BP4, 1= Onboard, 2 = Both. Mode: 0 = OFF, 1 = ON
+            </comment>
+            <args>
+                <arg name="cmd" type="U8">
+                </arg>
+                <arg name="heater" type="U8">
+                </arg>
+                <arg name="mode" type="U8">
+                </arg>
+             </args>
+        </command>
+
+        <command kind="async" opcode="11" mnemonic="RESET_COUNTERS">
+            <comment>
+            Send this command to reset boot counter and WDT counters.
+            </comment>
+            <args>
+                <arg name="magic" type="U8">
+                    <comment>magic = 0x42</comment>
+                </arg>
+             </args>
+        </command>
+
+        <command kind="async" opcode="12" mnemonic="CONFIG_CMD">
+            <comment>
+            Use this command to control the config system.
+            </comment>
+            <args>
+                <arg name="cmd" type="U8">
+                    <comment>cmd=1: Restore default config</comment>
+                </arg>
+             </args>
+        </command>
+
+        <command kind="async" opcode="13" mnemonic="CONFIG_GET">
+            <comment>
+            Use this command to request the P31u config.
+            </comment>
+        </command>
+
+        <command kind="async" opcode="14" mnemonic="CONFIG_SET">
+            <comment>
+            Use this command to request the P31u config.
+            </comment>
+            <args>
+                <arg name="pptmode" type="U8">
+                </arg>
+                <arg name="battheater_mode" type="U8">
+                </arg>
+                <arg name="battheater_low" type="I8">
+                </arg>
+                <arg name="battheater_high" type="I8">
+                </arg>
+                <arg name="output_normal_value1" type="U8">
+                </arg>
+                <arg name="output_normal_value2" type="U8">
+                </arg>
+                <arg name="output_normal_value3" type="U8">
+                </arg>
+                <arg name="output_normal_value4" type="U8">
+                </arg>
+                <arg name="output_normal_value5" type="U8">
+                </arg>
+                <arg name="output_normal_value6" type="U8">
+                </arg>
+                <arg name="output_normal_value7" type="U8">
+                </arg>
+                <arg name="output_normal_value8" type="U8">
+                </arg>
+                <arg name="output_safe_value1" type="U8">
+                </arg>
+                <arg name="output_safe_value2" type="U8">
+                </arg>
+                <arg name="output_safe_value3" type="U8">
+                </arg>
+                <arg name="output_safe_value4" type="U8">
+                </arg>
+                <arg name="output_safe_value5" type="U8">
+                </arg>
+                <arg name="output_safe_value6" type="U8">
+                </arg>
+                <arg name="output_safe_value7" type="U8">
+                </arg>
+                <arg name="output_safe_value8" type="U8">
+                </arg>
+                <arg name="output_initial_on_delay1" type="U16">
+                </arg>
+                <arg name="output_initial_on_delay2" type="U16">
+                </arg>
+                <arg name="output_initial_on_delay3" type="U16">
+                </arg>
+                <arg name="output_initial_on_delay4" type="U16">
+                </arg>
+                <arg name="output_initial_on_delay5" type="U16">
+                </arg>
+                <arg name="output_initial_on_delay6" type="U16">
+                </arg>
+                <arg name="output_initial_on_delay7" type="U16">
+                </arg>
+                <arg name="output_initial_on_delay8" type="U16">
+                </arg>
+                <arg name="output_initial_off_delay1" type="U16">
+                </arg>
+                <arg name="output_initial_off_delay2" type="U16">
+                </arg>
+                <arg name="output_initial_off_delay3" type="U16">
+                </arg>
+                <arg name="output_initial_off_delay4" type="U16">
+                </arg>
+                <arg name="output_initial_off_delay5" type="U16">
+                </arg>
+                <arg name="output_initial_off_delay6" type="U16">
+                </arg>
+                <arg name="output_initial_off_delay7" type="U16">
+                </arg>
+                <arg name="output_initial_off_delay8" type="U16">
+                </arg>
+                <arg name="output_initial_off_delay8" type="U16">
+                </arg>
+                <arg name="vboost1" type="U16">
+                </arg>
+                <arg name="vboost2" type="U16">
+                </arg>
+                <arg name="vboost3" type="U16">
+                </arg>
+             </args>
+        </command>
+
+        <command kind="async" opcode="15" mnemonic="HARD_RESET">
+            <comment>
+            Send this command to perform a hard reset of the P31, including cycling permanent 5V and 3.3V and battery outputs.
+            </comment>
+        </command>
+    </commands>
+
+    <telemetry>
+        <channel id="0" name="vboost1" data_type="U16">
+            <comment>
+            Voltage of Boost Converters[mV] [PV1]
+            </comment>
+        </channel>
+
+         <channel id="1" name="vboost2" data_type="U16">
+            <comment>
+            Voltage of Boost Converters[mV] [PV2]
+            </comment>
+        </channel>
+
+         <channel id="2" name="vboost3" data_type="U16">
+            <comment>
+            Voltage of Boost Converters[mV] [PV3]
+            </comment>
+        </channel>
+
+        <channel id="3" name="vbatt" data_type="U16">
+            <comment>
+            Voltage of Battery
+            </comment>
+        </channel>
+
+        <channel id="4" name="curin1" data_type="U16">
+            <comment>
+            Current in I_photo1[mA]
+            </comment>
+        </channel>
+
+        <channel id="5" name="curin2" data_type="U16">
+            <comment>
+            Current in I_photo2[mA]
+            </comment>
+        </channel>
+
+        <channel id="6" name="curin3" data_type="U16">
+            <comment>
+            Current in I_photo3[mA]
+            </comment>
+        </channel>
+
+        <channel id="7" name="cursun" data_type="U16">
+            <comment>
+            Current from boost converters [mA]
+            </comment>
+        </channel>
+
+        <channel id="8" name="cursys" data_type="U16">
+            <comment>
+            Current out of battery [mA]
+            </comment>
+        </channel>
+
+        <channel id="9" name="reserved1" data_type="U16">
+            <comment>
+            Reserved for future use
+            </comment>
+        </channel>
+
+        <channel id="10" name="curout1" data_type="U16">
+            <comment>
+            Current out(switchable outputs) 1 [mA]
+            </comment>
+        </channel>
+
+        <channel id="11" name="curout2" data_type="U16">
+            <comment>
+            Current out(switchable outputs) 2 [mA]
+            </comment>
+        </channel>
+
+        <channel id="12" name="curout3" data_type="U16">
+            <comment>
+            Current out(switchable outputs) 3 [mA]
+            </comment>
+        </channel>
+
+        <channel id="13" name="curout4" data_type="U16">
+            <comment>
+            Current out(switchable outputs) 4 [mA]
+            </comment>
+        </channel>
+
+        <channel id="14" name="curout5" data_type="U16">
+            <comment>
+            Current out(switchable outputs) 5 [mA]
+            </comment>
+        </channel>
+
+        <channel id="15" name="curout6" data_type="U16">
+            <comment>
+            Current out(switchable outputs) 6 [mA]
+            </comment>
+        </channel>
+
+
+        <channel id="16" name="output1" data_type="U8">
+            <comment>
+            Status of output 1
+            </comment>
+        </channel>
+
+        <channel id="17" name="output2" data_type="U8">
+            <comment>
+            Status of output 2
+            </comment>
+        </channel>
+
+        <channel id="18" name="output3" data_type="U8">
+            <comment>
+            Status of output 3
+            </comment>
+        </channel>
+
+        <channel id="19" name="output4" data_type="U8">
+            <comment>
+            Status of output 4
+            </comment>
+        </channel>
+
+        <channel id="20" name="output5" data_type="U8">
+            <comment>
+            Status of output 5
+            </comment>
+        </channel>
+
+        <channel id="21" name="output6" data_type="U8">
+            <comment>
+            Status of output 6
+            </comment>
+        </channel>
+
+        <channel id="22" name="output7" data_type="U8">
+            <comment>
+            Status of output 7
+            </comment>
+        </channel>
+
+        <channel id="23" name="output8" data_type="U8">
+            <comment>
+            Status of output 1
+            </comment>
+        </channel>
+
+        <channel id="24" name="output_on_delta1" data_type="U16">
+            <comment>
+            Time till power on 1
+            </comment>
+        </channel>
+
+        <channel id="25" name="output_on_delta2" data_type="U16">
+            <comment>
+            Time till power on 2
+            </comment>
+        </channel>
+
+        <channel id="26" name="output_on_delta3" data_type="U16">
+            <comment>
+            Time till power on 3
+            </comment>
+        </channel>
+
+        <channel id="27" name="output_on_delta4" data_type="U16">
+            <comment>
+            Time till power on 4
+            </comment>
+        </channel>
+
+        <channel id="28" name="output_on_delta5" data_type="U16">
+            <comment>
+            Time till power on 5
+            </comment>
+        </channel>
+
+        <channel id="29" name="output_on_delta6" data_type="U16">
+            <comment>
+            Time till power on 6
+            </comment>
+        </channel>
+
+        <channel id="30" name="output_on_delta7" data_type="U16">
+            <comment>
+            Time till power on 1
+            </comment>
+        </channel>
+
+        <channel id="31" name="output_on_delta8" data_type="U16">
+            <comment>
+            Time till power on 8
+            </comment>
+        </channel>
+
+
+        <channel id="32" name="output_off_delta1" data_type="U16">
+            <comment>
+            Time till power off 1
+            </comment>
+        </channel>
+
+         <channel id="33" name="output_off_delta2" data_type="U16">
+            <comment>
+            Time till power off 2
+            </comment>
+        </channel>
+
+         <channel id="34" name="output_off_delta3" data_type="U16">
+            <comment>
+            Time till power off 3
+            </comment>
+        </channel>
+
+         <channel id="35" name="output_off_delta4" data_type="U16">
+            <comment>
+            Time till power off 4
+            </comment>
+        </channel>
+
+         <channel id="36" name="output_off_delta5" data_type="U16">
+            <comment>
+            Time till power off 5
+            </comment>
+        </channel>
+
+         <channel id="37" name="output_off_delta6" data_type="U16">
+            <comment>
+            Time till power off 6
+            </comment>
+        </channel>
+
+         <channel id="38" name="output_off_delta7" data_type="U16">
+            <comment>
+            Time till power off 7
+            </comment>
+        </channel>
+
+         <channel id="39" name="output_off_delta8" data_type="U16">
+            <comment>
+            Time till power off 8
+            </comment>
+        </channel>
+
+        <channel id="40" name="latchup1" data_type="U16">
+            <comment>
+            Number of Latch-ups 1
+            </comment>
+        </channel>
+
+        <channel id="41" name="latchup2" data_type="U16">
+            <comment>
+            Number of Latch-ups 2
+            </comment>
+        </channel>
+
+        <channel id="42" name="latchup3" data_type="U16">
+            <comment>
+            Number of Latch-ups 3
+            </comment>
+        </channel>
+
+        <channel id="43" name="latchup4" data_type="U16">
+            <comment>
+            Number of Latch-ups 4
+            </comment>
+        </channel>
+
+        <channel id="44" name="latchup5" data_type="U16">
+            <comment>
+            Number of Latch-ups 5
+            </comment>
+        </channel>
+
+        <channel id="45" name="latchup6" data_type="U16">
+            <comment>
+            Number of Latch-ups 6
+            </comment>
+        </channel>
+
+        <channel id="46" name="wdt_i2c_time_left" data_type="U32">
+            <comment>
+            Time left on I2C wdt
+            </comment>
+        </channel>
+
+        <channel id="47" name="wdt_gnd_time_left" data_type="U32">
+            <comment>
+            Time left on I2C wdt
+            </comment>
+        </channel>
+
+         <channel id="48" name="wdt_csp_pings_left1" data_type="U8">
+            <comment>
+            Pings left on CSP wdt 1
+            </comment>
+        </channel>
+
+        <channel id="49" name="wdt_csp_pings_left2" data_type="U8">
+            <comment>
+            Pings left on CSP wdt 2
+            </comment>
+        </channel>
+
+         <channel id="50" name="counter_wdt_i2c" data_type="U32">
+            <comment>
+            Number of WDT I2C reboots
+            </comment>
+        </channel>
+
+        <channel id="51" name="counter_wdt_gnd" data_type="U32">
+            <comment>
+            Number of WDT GND reboots
+            </comment>
+        </channel>
+
+        <channel id="52" name="counter_wdt_csp1" data_type="U32">
+            <comment>
+            Number of WDT CSP reboots 1
+            </comment>
+        </channel>
+
+        <channel id="53" name="counter_wdt_csp2" data_type="U32">
+            <comment>
+            Number of WDT CSP reboots 2
+            </comment>
+        </channel>
+
+        <channel id="54" name="counter_boot" data_type="U32">
+            <comment>
+            Number of EPS reboots
+            </comment>
+        </channel>
+
+        <channel id="55" name="temp1" data_type="U16">
+            <comment>
+            Temperature Temp1 [degC]
+            </comment>
+        </channel>
+
+        <channel id="56" name="temp2" data_type="U16">
+            <comment>
+            Temperature Temp2 [degC]
+            </comment>
+        </channel>
+
+        <channel id="57" name="temp3" data_type="U16">
+            <comment>
+            Temperature Temp3 [degC]
+            </comment>
+        </channel>
+
+        <channel id="58" name="temp4" data_type="U16">
+            <comment>
+            Temperature Temp4 [degC]
+            </comment>
+        </channel>
+
+        <channel id="59" name="temp5" data_type="U16">
+            <comment>
+            Temperature BP4a [degC]
+            </comment>
+        </channel>
+
+        <channel id="60" name="temp6" data_type="U16">
+            <comment>
+            Temperature BP4b [degC]
+            </comment>
+        </channel>
+
+        <channel id="61" name="bootcause" data_type="U8">
+            <comment>
+            Cause of last EPS reset
+            </comment>
+        </channel>
+
+        <channel id="62" name="battmode" data_type="U8">
+            <comment>
+            Mode for battery [0 = initial, 1 = undervoltage, 2 = safemode,3 = nominal,4 = full]
+            </comment>
+        </channel>
+
+        <channel id="63" name="pptmode" data_type="U8">
+            <comment>
+            Mode of PPT Tracker [1=MPPT,2=FIXED]
+            </comment>
+        </channel>
+
+        <channel id="64" name="reserved2" data_type="U16">
+            <comment>
+            Reserved for future use
+            </comment>
+        </channel>
+
+        <channel id="65" name="battheater_mode" data_type="U8">
+            <comment>
+            Mode for battheater[0=manual,1=auto]
+            </comment>
+        </channel>
+
+        <channel id="66" name="battheater_low" data_type="I8">
+            <comment>
+            Turn heater on at [degC]
+            </comment>
+        </channel>
+
+        <channel id="67" name="battheater_high" data_type="
+            I8">
+            <comment>
+            Turn heater off at [degC]
+            </comment>
+        </channel>
+
+        <channel id="68" name="output_normal_value1" data_type="U8">
+            <comment>
+            Nominal mode ouput value 1
+            </comment>
+        </channel>
+
+        <channel id="69" name="output_normal_value2" data_type="U8">
+            <comment>
+            Nominal mode ouput value 2
+            </comment>
+        </channel>
+
+        <channel id="70" name="output_normal_value3" data_type="U8">
+            <comment>
+            Nominal mode ouput value 3
+            </comment>
+        </channel>
+
+        <channel id="71" name="output_normal_value4" data_type="U8">
+            <comment>
+            Nominal mode ouput value 4
+            </comment>
+        </channel>
+
+        <channel id="72" name="output_normal_value5" data_type="U8">
+            <comment>
+            Nominal mode ouput value 5
+            </comment>
+        </channel>
+
+        <channel id="73" name="output_normal_value6" data_type="U8">
+            <comment>
+            Nominal mode ouput value 6
+            </comment>
+        </channel>
+
+        <channel id="74" name="output_normal_value7" data_type="U8">
+            <comment>
+            Nominal mode ouput value 7
+            </comment>
+        </channel>
+
+        <channel id="75" name="output_normal_value8" data_type="U8">
+            <comment>
+            Nominal mode ouput value 8
+            </comment>
+        </channel>
+
+        <channel id="76" name="output_safe_value1" data_type="U8">
+            <comment>
+            Safe mode ouput value 1
+            </comment>
+        </channel>
+
+        <channel id="77" name="output_safe_value2" data_type="U8">
+            <comment>
+            Safe mode ouput value 2
+            </comment>
+        </channel>
+
+        <channel id="78" name="output_safe_value3" data_type="U8">
+            <comment>
+            Safe mode ouput value 3
+            </comment>
+        </channel>
+
+        <channel id="79" name="output_safe_value4" data_type="U8">
+            <comment>
+            Safe mode ouput value 4
+            </comment>
+        </channel>
+
+        <channel id="80" name="output_safe_value5" data_type="U8">
+            <comment>
+            Safe mode ouput value 5
+            </comment>
+        </channel>
+
+        <channel id="81" name="output_safe_value6" data_type="U8">
+            <comment>
+            Safe mode ouput value 6
+            </comment>
+        </channel>
+
+        <channel id="82" name="output_safe_value7" data_type="U8">
+            <comment>
+            Safe mode ouput value 7
+            </comment>
+        </channel>
+
+        <channel id="83" name="output_safe_value8" data_type="U8">
+            <comment>
+            Safe mode ouput value 8
+            </comment>
+        </channel>
+
+        <channel id="84" name="output_initial_on_delay1" data_type="U8">
+            <comment>
+            Output switches: init with these on delays[s] 1
+            </comment>
+        </channel>
+
+        <channel id="85" name="output_initial_on_delay2" data_type="U8">
+            <comment>
+            Output switches: init with these on delays[s] 2
+            </comment>
+        </channel>
+
+        <channel id="86" name="output_initial_on_delay3" data_type="U8">
+            <comment>
+            Output switches: init with these on delays[s] 3
+            </comment>
+        </channel>
+
+        <channel id="87" name="output_initial_on_delay4" data_type="U8">
+            <comment>
+            Output switches: init with these on delays[s] 4
+            </comment>
+        </channel>
+
+        <channel id="88" name="output_initial_on_delay5" data_type="U8">
+            <comment>
+            Output switches: init with these on delays[s] 5
+            </comment>
+        </channel>
+
+        <channel id="89" name="output_initial_on_delay6" data_type="U8">
+            <comment>
+            Output switches: init with these on delays[s] 6
+            </comment>
+        </channel>
+
+        <channel id="90" name="output_initial_on_delay7" data_type="U8">
+            <comment>
+            Output switches: init with these on delays[s] 7
+            </comment>
+        </channel>
+
+        <channel id="91" name="output_initial_on_delay8" data_type="U8">
+            <comment>
+            Output switches: init with these on delays[s] 8
+            </comment>
+        </channel>
+
+        <channel id="92" name="output_initial_off_delay1" data_type="U8">
+            <comment>
+            Output switches: init with these off delays[s] 1
+            </comment>
+        </channel>
+
+        <channel id="93" name="output_initial_off_delay2" data_type="U8">
+            <comment>
+            Output switches: init with these off delays[s] 2
+            </comment>
+        </channel>
+
+        <channel id="94" name="output_initial_off_delay3" data_type="U8">
+            <comment>
+            Output switches: init with these off delays[s] 3
+            </comment>
+        </channel>
+
+        <channel id="95" name="output_initial_off_delay4" data_type="U8">
+            <comment>
+            Output switches: init with these off delays[s] 4
+            </comment>
+        </channel>
+
+        <channel id="96" name="output_initial_off_delay5" data_type="U8">
+            <comment>
+            Output switches: init with these off delays[s] 5
+            </comment>
+        </channel>
+
+        <channel id="97" name="output_initial_off_delay6" data_type="U8">
+            <comment>
+            Output switches: init with these off delays[s] 6
+            </comment>
+        </channel>
+
+        <channel id="98" name="output_initial_off_delay7" data_type="U8">
+            <comment>
+            Output switches: init with these off delays[s] 7
+            </comment>
+        </channel>
+
+        <channel id="99" name="output_initial_off_delay8" data_type="U8">
+            <comment>
+            Output switches: init with these off delays[s] 8
+            </comment>
+        </channel>
+
+        <channel id="100" name="pv1" data_type="U16">
+            <comment>
+            Photo-voltaic input voltage 1
+            </comment>
+        </channel>
+
+        <channel id="101" name="pv2" data_type="U16">
+            <comment>
+            Photo-voltaic input voltage 2
+            </comment>
+        </channel>
+
+        <channel id="102" name="pv3" data_type="U16">
+            <comment>
+            Photo-voltaic input voltage 3
+            </comment>
+        </channel>
+
+        <channel id="103" name="pc" data_type="U16">
+            <comment>
+            Total Photo Current
+            </comment>
+        </channel>
+
+        <channel id="104" name="bv" data_type="U16">
+            <comment>
+            Battery Voltage
+            </comment>
+        </channel>
+
+        <channel id="105" name="sc" data_type="U16">
+            <comment>
+            Total System Current
+            </comment>
+        </channel>
+
+        <channel id="106" name="boosttemp1" data_type="I16">
+            <comment>
+            Temp Boost Convertor 1
+            </comment>
+        </channel>
+
+        <channel id="107" name="boosttemp2" data_type="I16">
+            <comment>
+            Temp Boost Convertor 2
+            </comment>
+        </channel>
+
+        <channel id="108" name="boosttemp3" data_type="I16">
+            <comment>
+            Temp Boost Convertor 3
+            </comment>
+        </channel>
+
+         <channel id="109" name="onboardbatt_temp" data_type="I16">
+            <comment>
+            Onboard Battery Temperature
+            </comment>
+        </channel>
+
+        <channel id="110" name="externalbatt_temp1" data_type="I16">
+            <comment>
+            External Battery Temperature 1
+            </comment>
+        </channel>
+
+         <channel id="111" name="externalbatt_temp2" data_type="I16">
+            <comment>
+            External Battery Temperature 2
+            </comment>
+        </channel>
+
+        <channel id="112" name="reset" data_type="U8">
+            <comment>
+            Cause of last EPS reset
+            </comment>
+        </channel>
+
+        <channel id="113" name="bootcount" data_type="U16">
+            <comment>
+            Number of EPS rebots
+            </comment>
+        </channel>
+
+        <channel id="114" name="sw_errors" data_type="U16">
+            <comment>
+            Number of errors in EPS software
+            </comment>
+        </channel>
+
+        <channel id="115" name="channel_status" data_type="U8">
+            <comment>
+            Maks of output channel status, 1=on, 0=off
+            </comment>
+        </channel>
+
+        <channel id="116" name="onboardHeaterMode" data_type="U8">
+            <comment>
+            Status of BP4 Heater Mode, 1=on, 0=off
+            </comment>
+        </channel>
+
+        <channel id="117" name="BP4_heaterMode" data_type="U8">
+            <comment>
+            Status of Onboard Heater Mode, 1=on, 0=off
+            </comment>
+        </channel>
+
+    </telemetry>
+
+
+
+    <events>
+        <event id="0" name="OutputSwitchStateON" severity="ACTIVITY_HI" format_string = "The output of %d was switched to ON" >
+            <comment>
+            Output switch state changed to ON
+            </comment>
+            <args>
+                <arg name="output_num" type="U8">
+                    <comment>Number corresponds to bitmask [NC NC 3.3V3 3.3V2 3.3V1 5V3 5V2 5V1]</comment>
+                </arg>
+            </args>
+        </event>
+    </events>
+
+    <event id="1" name="OutputSwitchStateOFF" severity="ACTIVITY_HI" format_string = "The output of %d was switched to OFF" >
+            <comment>
+            Output switch state changed to OFF
+            </comment>
+            <args>
+                <arg name="output_num" type="U8">
+                    <comment>Number corresponds to bitmask [NC NC 3.3V3 3.3V2 3.3V1 5V3 5V2 5V1]</comment>
+                </arg>
+            </args>
+        </event>
+    </events>
+
+    <event id="2" name="ChannelOutputValueChanged" severity="ACTIVITY_HI" format_string = "The %d channel was changed to %d with delay %d" >
+            <comment>
+            Output channel value changed
+            </comment>
+            <args>
+                <arg name="channel" type="U8">
+                </arg>
+                <arg name="value" type="U8">
+                </arg>
+                <arg name="delay" type="U8">
+                </arg>
+            </args>
+        </event>
+    </events>
+
+    <event id="3" name="VoltageSet" severity="ACTIVITY_HI" format_string = "The Voltage on the photo-voltaic inputs were set." >
+            <comment>
+            Photo-Voltaic Inputs V1,2,3 in mV were set
+            </comment>
+        </event>
+    </events>
+
+    <event id="4" name="SolarCellPowerTrackingSet" severity="ACTIVITY_HI" format_string = "The solar cell power tracking mode was set to %d." >
+            <comment>
+            Mode = 0 Hardware Default; Mode = 1 Max ppt; Mode = 2 Fixed software powerpoint
+            </comment>
+            <args>
+                <arg name="mode" type="U8">
+                </arg>
+            </args>
+        </event>
+    </events>
+
+    <event id="5" name="CountersReset" severity="ACTIVITY_HI" format_string = "The WDT counter and boot counter were reset." >
+            <comment>
+            Reset WDT counterand boot counter
+            </comment>
+        </event>
+    </events>
+
+    <event id="6" name="WDTReset" severity="ACTIVITY_HI" format_string = "The dedicated WDT was reset(kicked)." >
+            <comment>
+            Reset WDT
+            </comment>
+        </event>
+    </events>
+
+    <event id="7" name="RestoreDefaultConfig" severity="ACTIVITY_HI" format_string = "The default config system has been restored" >
+        </event>
+
+    <event id="8" name="FullReset" severity="ACTIVITY_HI" format_string = "The P31 has been hard reset.">
+            <comment>
+            This includes cycling permanent 5V and 3.3V and battery outputs.
+            </comment>
+        </event>
+
+    </events>
+</component>
