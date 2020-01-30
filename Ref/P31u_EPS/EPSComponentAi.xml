@@ -9,8 +9,8 @@
     <import_port_type>Svc/Sched/SchedPortAi.xml</import_port_type>
     <import_port_type>Fw/Tlm/TlmPortAi.xml</import_port_type>
     <import_port_type>Fw/Cmd/CmdResponsePortAi.xml</import_port_type>
-    <import_port_type>Drv/I2cDriverPorts/I2cWriteReadPortAi.xml</import_port_type>
-
+<!--    <import_port_type>Drv/I2cDriverPorts/I2cWriteReadPortAi.xml</import_port_type>
+-->
     <ports>
 
         <port name="cmdRegOut" data_type="Fw::CmdReg"  kind="output" role="CmdRegistration"    max_number="1">
@@ -30,10 +30,10 @@
 
         <port name="cmdResponseOut" data_type="Fw::CmdResponse"  kind="output" role="CmdResponse"  max_number="1">
         </port>
-
+<!--
         <port name="I2cWriteRead" data_type="Drv::I2cWriteRead" kind="output" max_number="1">
         </port>
-    </ports>
+-->    </ports>
 
     <commands>
         <command kind="async" opcode="0" mnemonic="Get_HK_1">
