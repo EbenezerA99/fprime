@@ -10,8 +10,8 @@
     <import_port_type>Fw/Tlm/TlmPortAi.xml</import_port_type>
     <import_port_type>Fw/Cmd/CmdResponsePortAi.xml</import_port_type>
     <import_port_type>Drv/I2cDriverPorts/I2cWriteReadPortAi.xml</import_port_type>
-    <ports>
 
+    <ports>
 
         <port name="cmdRegOut" data_type="Fw::CmdReg"  kind="output" role="CmdRegistration"    max_number="1">
         </port>
@@ -33,7 +33,6 @@
 
         <port name="I2cWriteRead" data_type="Drv::I2cWriteRead" kind="output" max_number="1">
         </port>
-
     </ports>
 
     <commands>
@@ -1014,9 +1013,8 @@
                 </arg>
             </args>
         </event>
-    </events>
 
-    <event id="1" name="OutputSwitchStateOFF" severity="ACTIVITY_HI" format_string = "The output of %d was switched to OFF" >
+        <event id="1" name="OutputSwitchStateOFF" severity="ACTIVITY_HI" format_string = "The output of %d was switched to OFF" >
             <comment>
             Output switch state changed to OFF
             </comment>
@@ -1026,9 +1024,8 @@
                 </arg>
             </args>
         </event>
-    </events>
 
-    <event id="2" name="ChannelOutputValueChanged" severity="ACTIVITY_HI" format_string = "The %d channel was changed to %d with delay %d" >
+        <event id="2" name="ChannelOutputValueChanged" severity="ACTIVITY_HI" format_string = "The %d channel was changed to %d with delay %d" >
             <comment>
             Output channel value changed
             </comment>
@@ -1041,16 +1038,14 @@
                 </arg>
             </args>
         </event>
-    </events>
 
-    <event id="3" name="VoltageSet" severity="ACTIVITY_HI" format_string = "The Voltage on the photo-voltaic inputs were set." >
+        <event id="3" name="VoltageSet" severity="ACTIVITY_HI" format_string = "The Voltage on the photo-voltaic inputs were set." >
             <comment>
             Photo-Voltaic Inputs V1,2,3 in mV were set
             </comment>
         </event>
-    </events>
 
-    <event id="4" name="SolarCellPowerTrackingSet" severity="ACTIVITY_HI" format_string = "The solar cell power tracking mode was set to %d." >
+        <event id="4" name="SolarCellPowerTrackingSet" severity="ACTIVITY_HI" format_string = "The solar cell power tracking mode was set to %d." >
             <comment>
             Mode = 0 Hardware Default; Mode = 1 Max ppt; Mode = 2 Fixed software powerpoint
             </comment>
@@ -1059,26 +1054,23 @@
                 </arg>
             </args>
         </event>
-    </events>
 
-    <event id="5" name="CountersReset" severity="ACTIVITY_HI" format_string = "The WDT counter and boot counter were reset." >
+        <event id="5" name="CountersReset" severity="ACTIVITY_HI" format_string = "The WDT counter and boot counter were reset." >
             <comment>
             Reset WDT counterand boot counter
             </comment>
         </event>
-    </events>
 
-    <event id="6" name="WDTReset" severity="ACTIVITY_HI" format_string = "The dedicated WDT was reset(kicked)." >
+        <event id="6" name="WDTReset" severity="ACTIVITY_HI" format_string = "The dedicated WDT was reset(kicked)." >
             <comment>
             Reset WDT
             </comment>
         </event>
-    </events>
 
-    <event id="7" name="RestoreDefaultConfig" severity="ACTIVITY_HI" format_string = "The default config system has been restored" >
+        <event id="7" name="RestoreDefaultConfig" severity="ACTIVITY_HI" format_string = "The default config system has been restored" >
         </event>
 
-    <event id="8" name="FullReset" severity="ACTIVITY_HI" format_string = "The P31 has been hard reset.">
+        <event id="8" name="FullReset" severity="ACTIVITY_HI" format_string = "The P31 has been hard reset.">
             <comment>
             This includes cycling permanent 5V and 3.3V and battery outputs.
             </comment>
